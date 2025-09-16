@@ -16,7 +16,7 @@ This is a powerful and flexible marketing bot for Telegram, built with Python an
 
 ```
 .
-├── .env              # Configuration file for your secrets
+├── .env.example      # Example configuration file
 ├── .gitignore        # Files to be ignored by Git
 ├── bot.py            # The main bot logic
 ├── keywords.json     # Your keyword-to-response mappings
@@ -51,7 +51,10 @@ pip install -r requirements.txt
 
 You need to provide your bot's token and your own Telegram user ID.
 
-1.  **Rename `.env.example` to `.env` (if applicable) or create a new `.env` file.** This file already exists in your directory.
+1.  **Create your configuration file.** Copy the example file to a new file named `.env`:
+    ```bash
+    cp .env.example .env
+    ```
 2.  **Open the `.env` file and fill in the values:**
 
     ```ini
