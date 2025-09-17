@@ -57,9 +57,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         f"Hello {user.mention_html()}! Welcome to your new marketing bot.\n\n"
         "Here are the commands you can use:\n"
         "/start - Shows this welcome message and registers you for updates.\n"
-        "/broadcast <message> - (Owner only) Sends a message to all users.\n"
-        "/send <id_or_@username> <message> - (Owner only) Sends a message to a group or channel.\n"
-        "/schedule <time> <target> <message> - (Owner only) Schedules a message. Time format: 1d2h3m4s.\n"
+        "/broadcast &lt;message&gt; - (Owner only) Sends a message to all users.\n"
+        "/send &lt;id_or_@username&gt; &lt;message&gt; - (Owner only) Sends a message to a group or channel.\n"
+        "/schedule &lt;time&gt; &lt;target&gt; &lt;message&gt; - (Owner only) Schedules a message. Time format: 1d2h3m4s.\n"
     )
 
     await update.message.reply_html(welcome_message)
