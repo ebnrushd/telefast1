@@ -435,8 +435,8 @@ async def schedule_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
     await update.message.reply_text(f"Message scheduled to be sent to {target} in {time_str}.")
 
-def main() -> None:
-    """Start the bot."""
+def create_application() -> Application:
+    """Create and configure the Telegram bot application."""
     persistence = PicklePersistence(filepath="persistence.pickle")
     application = Application.builder().token(TELEGRAM_TOKEN).persistence(persistence).build()
 
@@ -465,8 +465,4 @@ def main() -> None:
     # Add the message handler for keywords
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-    # Run the bot until the user presses Ctrl-C
-    application.run_polling()
-
-if __name__ == "__main__":
-    main()
+    return application
