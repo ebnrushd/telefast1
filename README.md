@@ -1,15 +1,19 @@
-# Telegram Marketing Bot
+# Telegram Marketing Bot - Enhanced
 
-This is a powerful and flexible marketing bot for Telegram, built with Python and `python-telegram-bot`.
+This is a powerful and flexible marketing bot for Telegram, built with Python and `python-telegram-bot`. This enhanced version includes interactive features, template management, and more to streamline your marketing efforts.
 
 ## Features
 
-*   **Welcome Message**: Greets new users who start the bot.
+*   **Welcome Message**: Greets new users and provides a command list.
 *   **User Subscription**: Automatically saves users who start the bot for future broadcasts.
-*   **Broadcasts**: As the bot owner, you can send a message to all subscribed users at once.
-*   **Group & Channel Messaging**: Send messages to any group or channel the bot is a member of.
+*   **Chat Management**: Save groups and channels to easily send messages to them later.
+*   **Message Templates**: Create and manage reusable message templates.
+*   **URL Buttons**: Add clickable URL buttons to your templates to direct users to your site.
+*   **Interactive Sending**: A user-friendly, menu-based system to send templates to your saved chats.
+*   **Broadcasts & Direct Messaging**: Send immediate messages to all users or specific chats.
+*   **Scheduled Messages**: Schedule messages to be sent at a future time.
 *   **Keyword Auto-Replies**: Automatically replies to messages containing specific keywords.
-*   **Scheduled Messages**: Schedule messages to be sent at a future time to users, groups, or channels.
+*   **Statistics**: Get a quick overview of your bot's usage.
 *   **Persistence**: Scheduled jobs are saved and will resume even if the bot is restarted.
 
 ## Project Structure
@@ -19,7 +23,9 @@ This is a powerful and flexible marketing bot for Telegram, built with Python an
 ├── .env.example      # Example configuration file
 ├── .gitignore        # Files to be ignored by Git
 ├── bot.py            # The main bot logic
+├── chats.json        # Stores your saved group/channel IDs
 ├── keywords.json     # Your keyword-to-response mappings
+├── templates.json    # Your saved message templates
 ├── persistence.pickle # Stores scheduled jobs (auto-generated)
 ├── README.md         # This file
 ├── requirements.txt  # Python dependencies
@@ -33,11 +39,9 @@ Follow these steps to get your bot up and running.
 ### 1. Prerequisites
 
 *   Python 3.8 or higher.
-*   A Telegram Bot Token. If you don't have one, talk to [@BotFather](https://t.me/BotFather) on Telegram to create a new bot and get your token.
+*   A Telegram Bot Token from [@BotFather](https://t.me/BotFather).
 
-### 2. Clone the Repository & Install Dependencies
-
-First, get the code and navigate into the directory. Then, install the required Python libraries.
+### 2. Install Dependencies
 
 ```bash
 # It is recommended to use a virtual environment
@@ -49,68 +53,68 @@ pip install -r requirements.txt
 
 ### 3. Configure Your Bot
 
-You need to provide your bot's token and your own Telegram user ID.
-
 1.  **Create your configuration file.** Copy the example file to a new file named `.env`:
     ```bash
     cp .env.example .env
     ```
 2.  **Open the `.env` file and fill in the values:**
-
     ```ini
     TELEGRAM_TOKEN=YOUR_TELEGRAM_TOKEN_HERE
     OWNER_ID=YOUR_USER_ID_HERE
     ```
-
-3.  **How to get your `OWNER_ID`?**
-    *   On Telegram, find the bot [@userinfobot](https://t.me/userinfobot).
-    *   Start a chat with it and it will immediately reply with your User ID.
-
-### 4. Customize Keywords
-
-Open the `keywords.json` file to define your own keyword-based auto-replies. The format is a simple JSON object where the key is the keyword (case-insensitive) and the value is the response the bot should send.
-
-```json
-{
-  "help": "Please tell me what you need help with.",
-  "pricing": "You can find our pricing at example.com/pricing."
-}
-```
+3.  **Find your `OWNER_ID`:** Talk to the bot [@userinfobot](https://t.me/userinfobot) on Telegram to get your user ID.
 
 ## Running the Bot
-
-To start the bot, simply run the `bot.py` script:
 
 ```bash
 python bot.py
 ```
-
-You should see log messages in your terminal indicating that the bot has started successfully.
+The bot will now be running. All commands listed below (except `/start`) are owner-only.
 
 ## How to Use the Bot
 
-Interact with your bot on Telegram. Only the `OWNER_ID` you specified can use the administrative commands.
+### Step 1: Save Your Chats
 
-### Commands
+Before you can send messages to groups or channels, you need to save them.
+1.  Add your bot to the group or channel. For channels, make sure the bot is an administrator with permission to post messages.
+2.  Go into the group/channel and type the command:
+    *   `/add_chat`
+3.  The bot will confirm that the chat has been saved. Repeat for all your target chats.
+*   To see all saved chats, use: `/list_chats`
 
-*   `/start`
-    *   For regular users: Displays the welcome message and subscribes them to broadcasts.
-    *   For everyone: A good way to check if the bot is running.
+### Step 2: Create Message Templates
 
-*   `/broadcast <message>`
-    *   (Owner only) Sends the `<message>` to every user who has started the bot.
-    *   Example: `/broadcast Hello everyone! We have a new promotion today.`
+Create reusable messages for your campaigns.
 
-*   `/send <target> <message>`
-    *   (Owner only) Sends the `<message>` to a specific group or channel.
-    *   `<target>` can be the numerical ID of the group/channel or its public username (e.g., `@channel_name`).
-    *   **Note**: The bot must be a member of the group or an admin in the channel (with post permissions).
-    *   Example: `/send @my_channel_name Check out our latest update!`
-    *   Example: `/send -1001234567890 This is a message to a private channel.`
+*   **To create a simple template:**
+    *   `/add_template <name> <content>`
+    *   Example: `/add_template welcome Welcome to our community!`
 
-*   `/schedule <time> <target> <message>`
-    *   (Owner only) Schedules a message to be sent later.
-    *   `<time>`: A relative time duration. Examples: `10m` (10 minutes), `2h` (2 hours), `1d12h` (1 day and 12 hours).
-    *   `<target>`: The same as the `/send` command, or the special keyword `all` to schedule a broadcast to all users.
-    *   Example: `/schedule 1h30m all Our webinar starts in 90 minutes!`
-    *   Example: `/schedule 1d @my_channel_name Big announcement tomorrow!`
+*   **To create a template with a clickable button:**
+    *   `/add_template <name> <content> | <button_text> | <button_url>`
+    *   Example: `/add_template promo Visit our site! | Click Here | https://example.com`
+
+*   To see all your templates, use: `/list_templates`
+*   To remove a template, use: `/delete_template <name>`
+
+### Step 3: Send Your Messages
+
+*   **Interactive Send (Recommended):**
+    *   `/send`
+    *   The bot will reply with a menu of your saved chats. Click one.
+    *   It will then show a menu of your saved templates. Click one to send it.
+
+*   **Broadcast to all subscribed users:**
+    *   `/broadcast <your message here>`
+
+*   **Schedule a message:**
+    *   `/schedule <time> <target> <message>`
+    *   `<time>`: e.g., `10m`, `2h`, `1d12h`.
+    *   `<target>`: A chat ID, a channel username (e.g., `@mychannel`), or `all` for a broadcast.
+
+### Other Commands
+
+*   **/stats**: Shows the number of subscribed users and saved chats.
+*   **/cancel**: Cancels the current operation (like the interactive `/send`).
+*   **Keyword Replies**: Edit `keywords.json` to add keyword-based auto-replies.
+```
